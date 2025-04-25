@@ -1,27 +1,29 @@
-const test = require("node:test");
-const assert = require("node:assert");
-const checkPassword = require("../checkpassword");
+import { describe, it } from "node:test";
+import assert from "node:assert";
+import { checkPassword } from "../checkpassword.js";
 
-test("hyvä salasana menee läpi", () => {
-  assert.strictEqual(checkPassword("HyväPassu1!"), true);
-});
+describe("checkPassword", () => {
+  it("hylkää LIIAn lyhyen salasanan!!", () => {
+    assert.strictEqual(checkPassword("Ab1!"), false);
+  });
 
-test("liian lyhyt salasana hylätään", () => {
-  assert.strictEqual(checkPassword("A1!a"), false);
-});
+  it("hylkää salasanan ilman ISOJA kirjaimia!!", () => {
+    assert.strictEqual(checkPassword("salasana1"), false);
+  });
 
-test("puuttuu iso kirjain", () => {
-  assert.strictEqual(checkPassword("pienet1!"), false);
-});
+  it("hylkää salasanan ilman PIENIÄ kirjaimia!!", () => {
+    assert.strictEqual(checkPassword("SALASANA1"), false);
+  });
 
-test("puuttuu pieni kirjain", () => {
-  assert.strictEqual(checkPassword("ISOT1!"), false);
-});
+  it("hylkää salasanan ilman NUMEROITA!!", () => {
+    assert.strictEqual(checkPassword("salasana!"), false);
+  });
 
-test("puuttuu numero", () => {
-  assert.strictEqual(checkPassword("EiNumeroa!"), false);
-});
+  it("hylkää salasanan ILMAN erikoismerkkiä", () => {
+    assert.strictEqual(checkPassword("Salasana1"), false);
+  });
 
-test("puuttuu erikoismerkki", () => {
-  assert.strictEqual(checkPassword("IlmanErikois1"), false);
+  it("hyväksyy KELVOLLISEN salasanan!!", () => {
+    assert.strictEqual(checkPassword("Salasana1!"), true);
+  });
 });
